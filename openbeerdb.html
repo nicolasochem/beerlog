@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>openbeerdb</title>
+</head>
+<body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+
+<p>Converts open beer databse to json for use in beer log.</p>
+<script>
+beers=[];
+$.getJSON('http://api.openbeerdatabase.com/v1/beers.json?callback=?', function(response) {
+  $(response.beers).each(function() {
+    beers[beers.length]={_id:this.name,brewery:this.brewery.name};
+  });
+  $('#beer_json').html((JSON.stringify(beers)));
+});
+</script>
+<p id='beer_json'>
+</p>
+
+
+
+</body>
+</html>

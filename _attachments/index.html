@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Beers</title>
+    <link rel="stylesheet" href="style/main.css" type="text/css">
+    <link rel="stylesheet" href="style/jquery.mobile-1.0rc1.min.css" type="text/css"/>
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header"><h2>Beers</h2></div>
+      <div data-role="content">
+        <ul id="beers" data-role="listview" data-theme="c" data-dividertheme="b" />
+      </div>
+      <div data-role="footer">Footer</div>
+    </div>
+  </body>
+  <script src="vendor/couchapp/loader.js"></script>
+  <script type="text/javascript" charset="utf-8">
+
+    $db = $.couch.db("beers");
+
+    function handleDocumentReady()
+    {
+      refreshBeers();
+    }
+ 
+    function refreshBeers()
+    {
+      $("#beers").empty();
+      $db.view("beers/beers",
+        { success: function( data ) {
+            //var Mustache = require("vendor/couchapp/lib/mustache");
+            var i;
+            for( i in data.rows )
+            {
+                beer = data.rows[i].value;
+                //beer_li=Mustache.to_html(this.templates.beer),{
+                //  _id:beer._id,
+                //  brewery:beer.brewery
+                //};
+                beer_li="<li>"+beer._id+"<br/>"+beer.brewery+"</li>"
+                $("#beers").append(beer_li);
+            }
+            $("#beers").listview( "refresh" );
+          }
+        });
+     }
+    
+    $(document).ready( handleDocumentReady );
+    
+  </script>
+</html>
